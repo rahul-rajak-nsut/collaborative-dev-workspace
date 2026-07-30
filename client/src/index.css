@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+:root {
+  --color-bg: #1b1a21;
+  --color-panel: #37353e;
+  --color-terminal: #141317;
+  --color-border: #4f4f5a;
+  --color-accent: #8fa37e;
+  --color-accent-warm: #715a5a;
+  --color-accent-warm-hover: #86706f;
+  --color-text: #d3dad9;
+  --color-text-muted: #7d8a87;
+  --color-danger: #c77b6b;
+}
+
+body {
+  font-family: "JetBrains Mono", monospace;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes fadeInLine {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.terminal-line {
+  animation: fadeInLine 0.3s ease-out forwards;
+  opacity: 0;
+}
