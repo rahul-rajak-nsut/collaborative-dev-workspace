@@ -1,5 +1,31 @@
 const mongoose = require("mongoose");
 
+const memberSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["editor", "viewer"],
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["active", "pending"],
+      default: "pending",
+    },
+    invitedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { _id: false, timestamps: true }
+);
+
 const projectSchema = new mongoose.Schema(
   {
     name: {
@@ -21,6 +47,7 @@ const projectSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    members: [memberSchema],
   },
   { timestamps: true }
 );
