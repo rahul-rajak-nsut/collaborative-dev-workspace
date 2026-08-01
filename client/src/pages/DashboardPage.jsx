@@ -7,6 +7,7 @@ import api from "../services/api";
 import ProjectCard from "../components/ProjectCard";
 import NewProjectModal from "../components/NewProjectModal";
 import MembersModal from "../components/MembersModal";
+//import FileExplorer from "../components/FileExplorer";
 
 function DashboardPage() {
   const { user, logout } = useAuth();
