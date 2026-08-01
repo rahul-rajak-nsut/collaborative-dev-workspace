@@ -135,17 +135,17 @@ const removeMember = async (req, res) => {
 };
 
 // @route GET /api/projects/:id/members
+// @route GET /api/projects/:id/members
 const getMembers = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id).populate(
-      "members.user",
-      "username email"
-    ).populate("owner", "username email");
-
+    const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ message: "Project not found" });
 
     const role = getRole(project, req.user._id);
     if (!role) return res.status(403).json({ message: "Not a member of this project" });
+
+    await project.populate("members.user", "username email");
+    await project.populate("owner", "username email");
 
     res.status(200).json({ owner: project.owner, members: project.members });
   } catch (error) {

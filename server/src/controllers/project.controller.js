@@ -20,7 +20,13 @@ const createProject = async (req, res) => {
 // @route GET /api/projects
 const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find({ owner: req.user._id }).sort({ createdAt: -1 });
+    const projects = await Project.find({
+      $or: [
+        { owner: req.user._id },
+        { members: { $elemMatch: { user: req.user._id, status: "active" } } },
+      ],
+    }).sort({ createdAt: -1 });
+
     res.status(200).json({ projects });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -30,9 +36,15 @@ const getProjects = async (req, res) => {
 // @route GET /api/projects/:id
 const getProjectById = async (req, res) => {
   try {
-    const project = await Project.findOne({ _id: req.params.id, owner: req.user._id });
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ message: "Project not found" });
 
-    if (!project) {
+    const isOwner = project.owner.toString() === req.user._id.toString();
+    const isActiveMember = project.members.some(
+      (m) => m.user.toString() === req.user._id.toString() && m.status === "active"
+    );
+
+    if (!isOwner && !isActiveMember) {
       return res.status(404).json({ message: "Project not found" });
     }
 

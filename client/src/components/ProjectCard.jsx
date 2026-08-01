@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Trash2, Pencil, Check, X } from "lucide-react";
+import { Trash2, Pencil, Check, X, Users } from "lucide-react";
 
-function ProjectCard({ project, onRename, onDelete }) {
+function ProjectCard({ project, onRename, onDelete, onOpenMembers }) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(project.name);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -35,7 +35,10 @@ function ProjectCard({ project, onRename, onDelete }) {
             <button onClick={handleSave} className="text-[var(--color-accent)]">
               <Check size={16} />
             </button>
-            <button onClick={() => setIsEditing(false)} className="text-[var(--color-text-muted)]">
+            <button
+              onClick={() => setIsEditing(false)}
+              className="text-[var(--color-text-muted)]"
+            >
               <X size={16} />
             </button>
           </div>
@@ -63,6 +66,14 @@ function ProjectCard({ project, onRename, onDelete }) {
                 <Pencil size={14} />
               </button>
             )}
+
+            <button
+              onClick={() => onOpenMembers(project._id)}
+              className="text-[var(--color-text-muted)] hover:text-[var(--color-accent)]"
+              title="Members"
+            >
+              <Users size={14} />
+            </button>
 
             {confirmingDelete ? (
               <div className="flex items-center gap-1.5">

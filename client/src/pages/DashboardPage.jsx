@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import ProjectCard from "../components/ProjectCard";
 import NewProjectModal from "../components/NewProjectModal";
+import MembersModal from "../components/MembersModal";
 
 function DashboardPage() {
   const { user, logout } = useAuth();
@@ -14,6 +15,7 @@ function DashboardPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [membersProjectId, setMembersProjectId] = useState(null);
 
   const fetchProjects = async () => {
     try {
@@ -43,7 +45,9 @@ function DashboardPage() {
   const handleRename = async (id, name) => {
     try {
       const res = await api.put(`/api/projects/${id}`, { name });
-      setProjects((prev) => prev.map((p) => (p._id === id ? res.data.project : p)));
+      setProjects((prev) =>
+        prev.map((p) => (p._id === id ? res.data.project : p)),
+      );
       toast.success("Renamed");
     } catch (error) {
       toast.error("Failed to rename");
@@ -71,9 +75,12 @@ function DashboardPage() {
       {/* Top bar */}
       <div className="border-b border-[var(--color-border)] px-6 py-4 flex items-center justify-between">
         <div>
-          <p className="text-[var(--color-accent)] text-xs">// session active</p>
+          <p className="text-[var(--color-accent)] text-xs">
+            // session active
+          </p>
           <h1 className="text-lg font-medium">
-            {user?.username}<span className="text-[var(--color-accent)] cursor-blink">_</span>
+            {user?.username}
+            <span className="text-[var(--color-accent)] cursor-blink">_</span>
           </h1>
         </div>
         <button
@@ -103,7 +110,9 @@ function DashboardPage() {
           <p className="text-[var(--color-text-muted)] text-sm">loading...</p>
         ) : projects.length === 0 ? (
           <div className="border border-dashed border-[var(--color-border)] rounded-lg py-16 text-center">
-            <p className="text-[var(--color-text-muted)] text-sm mb-1">// no projects yet</p>
+            <p className="text-[var(--color-text-muted)] text-sm mb-1">
+              // no projects yet
+            </p>
             <p className="text-[var(--color-text-muted)] text-xs">
               click "new project" to get started
             </p>
@@ -116,6 +125,7 @@ function DashboardPage() {
                 project={project}
                 onRename={handleRename}
                 onDelete={handleDelete}
+                onOpenMembers={setMembersProjectId}
               />
             ))}
           </div>
@@ -123,7 +133,16 @@ function DashboardPage() {
       </div>
 
       {showModal && (
-        <NewProjectModal onClose={() => setShowModal(false)} onCreate={handleCreate} />
+        <NewProjectModal
+          onClose={() => setShowModal(false)}
+          onCreate={handleCreate}
+        />
+      )}
+      {membersProjectId && (
+        <MembersModal
+          projectId={membersProjectId}
+          onClose={() => setMembersProjectId(null)}
+        />
       )}
     </div>
   );
