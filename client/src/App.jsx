@@ -6,11 +6,13 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+import { SocketProvider } from "./context/SocketContext";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <SocketProvider>
        
         <Toaster
           position="top-center"
@@ -44,6 +46,7 @@ function App() {
           />
           <Route path="/" element={<LoginPage />} />
         </Routes>
+        </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
   );

@@ -5,6 +5,7 @@ import { X, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../services/api";
 import FileExplorer from "../components/FileExplorer";
+import PresenceBar from "../components/PresenceBar";
 
 // Maps file extensions to Monaco's language identifiers
 const getLanguage = (filename) => {
@@ -117,6 +118,7 @@ function ProjectDetailPage() {
           <span className="text-[var(--color-accent)]">$</span> editing project
         </p>
       </div>
+      <PresenceBar projectId={projectId} />
 
       <div className="flex flex-1 overflow-hidden">
         <FileExplorer projectId={projectId} onSelectFile={handleSelectFile} />
