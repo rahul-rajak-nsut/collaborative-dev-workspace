@@ -76,5 +76,35 @@ const deleteFile = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+// @route GET /api/projects/:projectId/files/:id/content
+const getFileContent = async (req, res) => {
+  try {
+    const node = await FileNode.findOne({ _id: req.params.id, project: req.params.projectId });
+    if (!node) return res.status(404).json({ message: "Not found" });
+    if (node.type !== "file") return res.status(400).json({ message: "Not a file" });
 
-module.exports = { createFile, getFiles, updateFile, deleteFile };
+    res.status(200).json({ content: node.content });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// @route PUT /api/projects/:projectId/files/:id/content
+const saveFileContent = async (req, res) => {
+  try {
+    const { content } = req.body;
+
+    const node = await FileNode.findOne({ _id: req.params.id, project: req.params.projectId });
+    if (!node) return res.status(404).json({ message: "Not found" });
+    if (node.type !== "file") return res.status(400).json({ message: "Not a file" });
+
+    node.content = content;
+    await node.save();
+
+    res.status(200).json({ message: "Saved" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = { createFile, getFiles, updateFile, deleteFile, getFileContent, saveFileContent };

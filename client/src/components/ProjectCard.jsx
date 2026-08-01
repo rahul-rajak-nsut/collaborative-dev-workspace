@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Trash2, Pencil, Check, X, Users } from "lucide-react";
 
 function ProjectCard({ project, onRename, onDelete, onOpenMembers }) {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(project.name);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -14,7 +16,10 @@ function ProjectCard({ project, onRename, onDelete, onOpenMembers }) {
   };
 
   return (
-    <div className="bg-[var(--color-panel)] border border-[var(--color-border)] rounded-lg overflow-hidden hover:border-[var(--color-accent)] transition group">
+    <div
+      onClick={() => navigate(`/dashboard/projects/${project._id}`)}
+      className="bg-[var(--color-panel)] border border-[var(--color-border)] rounded-lg overflow-hidden hover:border-[var(--color-accent)] transition group cursor-pointer"
+    >
       {/* Fake window chrome */}
       <div className="flex items-center gap-1.5 px-3 py-2 bg-[#2A2932] border-b border-[var(--color-border)]">
         <span className="w-2.5 h-2.5 rounded-full bg-[#C77B6B]" />
@@ -57,7 +62,10 @@ function ProjectCard({ project, onRename, onDelete, onOpenMembers }) {
             {new Date(project.createdAt).toLocaleDateString()}
           </span>
 
-          <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition"
+          >
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}

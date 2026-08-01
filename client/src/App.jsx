@@ -5,12 +5,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProjectDetailPage from "./pages/ProjectDetailPage";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        // App.jsx Toaster
+       
         <Toaster
           position="top-center"
           toastOptions={{
@@ -23,6 +24,14 @@ function App() {
           }}
         />
         <Routes>
+          <Route
+            path="/dashboard/projects/:id"
+            element={
+              <ProtectedRoute>
+                <ProjectDetailPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
